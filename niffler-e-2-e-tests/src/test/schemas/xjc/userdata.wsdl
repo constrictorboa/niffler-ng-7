@@ -131,7 +131,11 @@
                     <xs:element maxOccurs="1" minOccurs="0" name="photo" type="xs:string"/>
                     <xs:element maxOccurs="1" minOccurs="0" name="photoSmall" type="xs:string"/>
 <<<<<<< HEAD
+<<<<<<< HEAD
                     <xs:element maxOccurs="1" minOccurs="0" name="friendState" type="tns:friendState"/>
+=======
+                    <xs:element maxOccurs="1" minOccurs="0" name="friendshipStatus" type="tns:friendshipStatus"/>
+>>>>>>> 722873750b3c86b7db075dbab629679b749babbb
 =======
                     <xs:element maxOccurs="1" minOccurs="0" name="friendshipStatus" type="tns:friendshipStatus"/>
 >>>>>>> 722873750b3c86b7db075dbab629679b749babbb
@@ -156,7 +160,11 @@
             </xs:simpleType>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             <xs:simpleType name="friendState">
+=======
+            <xs:simpleType name="friendshipStatus">
+>>>>>>> 722873750b3c86b7db075dbab629679b749babbb
 =======
             <xs:simpleType name="friendshipStatus">
 >>>>>>> 722873750b3c86b7db075dbab629679b749babbb

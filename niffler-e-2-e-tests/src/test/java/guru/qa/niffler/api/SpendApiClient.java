@@ -16,7 +16,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SpendApiClient {
-
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Config.getInstance().spendUrl())
             .addConverterFactory(JacksonConverterFactory.create())
@@ -122,3 +121,4 @@ public class SpendApiClient {
         return response.body();
     }
 }
+

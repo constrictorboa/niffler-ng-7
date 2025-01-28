@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.platform.commons.support.AnnotationSupport;
 
+import java.util.Objects;
 import java.util.Random;
 
 public class CreateCategoryExtension implements BeforeEachCallback, ParameterResolver, AfterEachCallback {
@@ -57,19 +58,15 @@ public class CreateCategoryExtension implements BeforeEachCallback, ParameterRes
 
     @Override
     public void afterEach(ExtensionContext context) {
-        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), Category.class)
-                .ifPresent(anno -> {
-                    if (anno.archived()) {
-                        CategoryJson category =
-                                (CategoryJson) context.getStore(NAMESPACE).get(context.getUniqueId());
-
-                        spendApiClient.updateCategory(new CategoryJson(
-                                category.id(),
-                                category.name(),
-                                category.username(),
-                                true
-                        ));
-                    }
-                });
+        CategoryJson category =
+                (CategoryJson) context.getStore(NAMESPACE).get(context.getUniqueId());
+        if (Objects.nonNull(category)) {
+            spendApiClient.updateCategory(new CategoryJson(
+                    category.id(),
+                    category.name(),
+                    category.username(),
+                    true
+            ));
+        }
     }
 }

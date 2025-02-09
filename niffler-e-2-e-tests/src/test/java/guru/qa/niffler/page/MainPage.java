@@ -13,6 +13,7 @@ public class MainPage {
     private final SelenideElement historyOfSpendingsBlock = $("#spendings");
     private final SelenideElement menuButton = $("button[aria-label='Menu']");
     private final SelenideElement profileButton = $("a[href='/profile']");
+    private final SelenideElement friendsButton = $("a[href='/people/friends']");
 
 
     public EditSpendingPage editSpending(String spendingDescription) {
@@ -32,6 +33,11 @@ public class MainPage {
     public MainPage menuButtonClick() {
         menuButton.click();
         return this;
+    }
+
+    public FriendsPage friendsButtonClick() {
+        friendsButton.click();
+        return new FriendsPage();
     }
 
     public ProfilePage profileButtonClick() {

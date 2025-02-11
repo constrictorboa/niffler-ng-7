@@ -1,7 +1,7 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.api.SpendApiClient;
-import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.meta.User;
 import guru.qa.niffler.model.CategoryJson;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
@@ -21,29 +21,32 @@ public class CreateCategoryExtension implements BeforeEachCallback, ParameterRes
 
     @Override
     public void beforeEach(ExtensionContext context) {
-        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), Category.class)
+        AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
                 .ifPresent(anno -> {
-                    CategoryJson newCategory =
-                            new CategoryJson(
-                                    null,
-                                    "category " + System.currentTimeMillis() + new Random().nextInt(1, 100),
-                                    anno.username(),
-                                    false
+                    if (anno.categories().length > 0) {
+                        CategoryJson newCategory =
+                                new CategoryJson(
+                                        null,
+                                        "category " + System.currentTimeMillis() + new Random().nextInt(1, 100),
+                                        anno.username(),
+                                        false
+                                );
+                        CategoryJson createdJson = spendApiClient.createCategory(newCategory);
+                        if (anno.categories()[0].archived()) {
+                            createdJson = new CategoryJson(
+                                    createdJson.id(),
+                                    createdJson.name(),
+                                    createdJson.username(),
+                                    true
                             );
-                    CategoryJson createdJson = spendApiClient.createCategory(newCategory);
-                    if (anno.archived()) {
-                        createdJson = new CategoryJson(
-                                createdJson.id(),
-                                createdJson.name(),
-                                createdJson.username(),
-                                true
+                            createdJson = spendApiClient.updateCategory(createdJson);
+                        }
+                        context.getStore(NAMESPACE).put(
+                                context.getUniqueId(),
+                                createdJson
+
                         );
-                        createdJson = spendApiClient.updateCategory(createdJson);
                     }
-                    context.getStore(NAMESPACE).put(
-                            context.getUniqueId(),
-                            createdJson
-                    );
                 });
     }
 

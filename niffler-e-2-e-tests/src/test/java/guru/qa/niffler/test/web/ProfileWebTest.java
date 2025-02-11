@@ -2,14 +2,17 @@ package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.jupiter.annotation.Category;
+import guru.qa.niffler.jupiter.annotation.meta.User;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.Test;
 
-public class ProfileWebTest extends BaseWebTest{
-    @Category(
+public class ProfileWebTest extends BaseWebTest {
+    @User(
             username = "duck",
-            archived = false
+            categories = @Category(
+                    archived = false
+            )
     )
     @Test
     void archivedCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
@@ -24,9 +27,11 @@ public class ProfileWebTest extends BaseWebTest{
                 .checkThatCategoryPresentInList(categoryJson.name());
     }
 
-    @Category(
+    @User(
             username = "duck",
-            archived = true
+            categories = @Category(
+                    archived = true
+            )
     )
     @Test
     void activeCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {

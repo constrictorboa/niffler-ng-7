@@ -73,7 +73,7 @@ public class UsersQueueExtension implements
     @Override
     public void beforeTestExecution(ExtensionContext context) {
         List<Parameter> parameters = Arrays.stream(context.getRequiredTestMethod().getParameters())
-                .filter(p -> AnnotationSupport.isAnnotated(p, UserType.class))
+                .filter(p -> AnnotationSupport.isAnnotated(p, UserType.class) && p.getType().isAssignableFrom(StaticUser.class))
                 .toList();
 
         Map<UserType, StaticUser> users = new HashMap<>();
@@ -109,8 +109,10 @@ public class UsersQueueExtension implements
                 context.getUniqueId(),
                 Map.class
         );
-        for (Map.Entry<UserType, StaticUser> e : users.entrySet()) {
-            getQueue(e.getKey().value()).add(e.getValue());
+        if (users != null) {
+            for (Map.Entry<UserType, StaticUser> e : users.entrySet()) {
+                getQueue(e.getKey().value()).add(e.getValue());
+            }
         }
     }
 

@@ -30,17 +30,17 @@ public class MainPage {
         historyOfSpendingsBlock.shouldBe(visible);
     }
 
-    public MainPage menuButtonClick() {
+    public MainPage clickOnMenuButton() {
         menuButton.click();
         return this;
     }
 
-    public FriendsPage friendsButtonClick() {
+    public FriendsPage clickOnFriendsButton() {
         friendsButton.click();
         return new FriendsPage();
     }
 
-    public ProfilePage profileButtonClick() {
+    public ProfilePage clickOnProfileButton() {
         profileButton.click();
         return new ProfilePage();
     }

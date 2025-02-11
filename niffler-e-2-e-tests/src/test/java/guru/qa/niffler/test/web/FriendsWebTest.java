@@ -19,8 +19,8 @@ public class FriendsWebTest extends BaseWebTest {
     void friendShouldBePresentInFriendsTable(@UserType(WITH_FRIEND) StaticUser user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password())
-                .menuButtonClick()
-                .friendsButtonClick()
+                .clickOnMenuButton()
+                .clickOnFriendsButton()
                 .checkThatFriendsTableContainsFriend(user.friend())
                 .checkThatUnfriendButtonVisible(user.friend());
     }
@@ -30,8 +30,8 @@ public class FriendsWebTest extends BaseWebTest {
     void friendTableShouldBeEmptyForNewUser(@UserType(EMPTY) StaticUser user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password())
-                .menuButtonClick()
-                .friendsButtonClick()
+                .clickOnMenuButton()
+                .clickOnFriendsButton()
                 .checkThatTableEmpty();
     }
 
@@ -41,8 +41,8 @@ public class FriendsWebTest extends BaseWebTest {
     void incomeInvitationBePresentInFriendsTable(@UserType(WITH_INCOME_REQUEST) StaticUser user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password())
-                .menuButtonClick()
-                .friendsButtonClick()
+                .clickOnMenuButton()
+                .clickOnFriendsButton()
                 .checkThatRequestsTableContainsRequest(user.income())
                 .checkThatAcceptButtonVisible(user.income())
                 .checkThatDeclineButtonVisible(user.income());
@@ -54,10 +54,10 @@ public class FriendsWebTest extends BaseWebTest {
     void outcomeInvitationBePresentInAllPeopleTable(@UserType(WITH_OUTCOME_REQUEST) StaticUser user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.password())
-                .menuButtonClick()
-                .friendsButtonClick()
+                .clickOnMenuButton()
+                .clickOnFriendsButton()
                 .checkThatTableEmpty()
-                .allFriendsButtonClick()
+                .clickOnAllFriendsButton()
                 .checkThatOutcomeRequestVisible(user.outcome());
     }
 }

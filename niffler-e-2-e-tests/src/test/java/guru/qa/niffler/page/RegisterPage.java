@@ -28,12 +28,12 @@ public class RegisterPage {
         return this;
     }
 
-    public RegisterPage submitButtonClick() {
+    public RegisterPage clickOnSubmitButton() {
         submitButton.click();
         return this;
     }
 
-    public LoginPage loginPageClick() {
+    public LoginPage clickOnLoginButton() {
         loginButton.click();
         return new LoginPage();
     }

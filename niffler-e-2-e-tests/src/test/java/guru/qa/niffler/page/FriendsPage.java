@@ -15,7 +15,7 @@ public class FriendsPage {
     private final ElementsCollection allPeopleTable = $("#all").$$("tr");
     private final SelenideElement allPeopleButton = $("a[href='/people/all']");
 
-    public FriendsPage allFriendsButtonClick() {
+    public FriendsPage clickOnAllFriendsButton() {
         allPeopleButton.click();
         return this;
     }

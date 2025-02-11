@@ -20,7 +20,7 @@ public class LoginPage {
     return new MainPage();
   }
 
-  public RegisterPage registerButtonClick() {
+  public RegisterPage clickOnRegisterButton() {
     registerButton.click();
     return new RegisterPage();
   }

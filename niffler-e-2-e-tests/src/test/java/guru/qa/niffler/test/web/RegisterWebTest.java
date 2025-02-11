@@ -14,13 +14,13 @@ public class RegisterWebTest extends BaseWebTest {
         String newPassword = "pass!1";
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
-                .registerButtonClick()
+                .clickOnRegisterButton()
                 .setUsername(newUserName)
                 .setPassword(newPassword)
                 .setPasswordSubmit(newPassword)
-                .submitButtonClick()
+                .clickOnSubmitButton()
                 .checkThatSuccessRegistrationFormVisible()
-                .loginPageClick()
+                .clickOnLoginButton()
                 .login(newUserName, newPassword)
                 .checkThatLoginSuccess();
     }
@@ -31,11 +31,11 @@ public class RegisterWebTest extends BaseWebTest {
         String password = "pass!1";
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
-                .registerButtonClick()
+                .clickOnRegisterButton()
                 .setUsername(userName)
                 .setPassword(password)
                 .setPasswordSubmit(password)
-                .submitButtonClick()
+                .clickOnSubmitButton()
                 .checkThatRegisterFormVisible()
                 .checkThatErrorUsernameExistsVisible(userName);
     }
@@ -46,11 +46,11 @@ public class RegisterWebTest extends BaseWebTest {
         String password = "pass!1";
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
-                .registerButtonClick()
+                .clickOnRegisterButton()
                 .setUsername(userName)
                 .setPassword(password)
                 .setPasswordSubmit(password + "1")
-                .submitButtonClick()
+                .clickOnSubmitButton()
                 .checkThatRegisterFormVisible()
                 .checkThatErrorPaaswordsShouldBeEqualVisible();
     }

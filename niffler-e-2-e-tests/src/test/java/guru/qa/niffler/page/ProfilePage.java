@@ -10,7 +10,7 @@ import static com.codeborne.selenide.Selenide.$x;
 public class ProfilePage {
     private final SelenideElement showArchivedRadiobutton = $(byText("Show archived")).$x("preceding::span/input");
 
-    public ProfilePage showArchivedRadiobuttonClick() {
+    public ProfilePage clickOnShowArchivedRadiobutton() {
         showArchivedRadiobutton.scrollIntoView(false).click();
         return this;
     }

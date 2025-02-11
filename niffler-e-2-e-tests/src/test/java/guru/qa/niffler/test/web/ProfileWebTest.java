@@ -15,12 +15,12 @@ public class ProfileWebTest extends BaseWebTest{
     void archivedCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login("duck", "12345")
-                .menuButtonClick()
-                .profileButtonClick()
+                .clickOnMenuButton()
+                .clickOnProfileButton()
                 .checkThatCategoryPresentInList(categoryJson.name())
                 .archiveCategory(categoryJson.name())
                 .checkThatCategoryNotPresentInList(categoryJson.name())
-                .showArchivedRadiobuttonClick()
+                .clickOnShowArchivedRadiobutton()
                 .checkThatCategoryPresentInList(categoryJson.name());
     }
 
@@ -32,13 +32,13 @@ public class ProfileWebTest extends BaseWebTest{
     void activeCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login("duck", "12345")
-                .menuButtonClick()
-                .profileButtonClick()
+                .clickOnMenuButton()
+                .clickOnProfileButton()
                 .checkThatCategoryNotPresentInList(categoryJson.name())
-                .showArchivedRadiobuttonClick()
+                .clickOnShowArchivedRadiobutton()
                 .checkThatCategoryPresentInList(categoryJson.name())
                 .unarchiveCategory(categoryJson.name())
-                .showArchivedRadiobuttonClick()
+                .clickOnShowArchivedRadiobutton()
                 .checkThatCategoryPresentInList(categoryJson.name());
     }
 }

@@ -1,5 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
+import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.meta.User;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
@@ -25,11 +26,12 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
         AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
                 .ifPresent(anno -> {
                     if (anno.spendings().length > 0) {
+                        Spending spending = anno.spendings()[0];
                         CategoryJson categoryJson = spendDbClient
-                                .findCategoryByUsernameAndCategoryName(anno.username(), anno.spendings()[0].category()).orElse(
+                                .findCategoryByUsernameAndCategoryName(anno.username(), spending.category()).orElse(
                                         new CategoryJson(
                                                 null,
-                                                anno.spendings()[0].category(),
+                                                spending.category(),
                                                 anno.username(),
                                                 false
                                         ));
@@ -39,8 +41,8 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
                                 new Date(),
                                 categoryJson,
                                 CurrencyValues.RUB,
-                                anno.spendings()[0].amount(),
-                                anno.spendings()[0].description(),
+                                spending.amount(),
+                                spending.description(),
                                 anno.username()
 
                         );

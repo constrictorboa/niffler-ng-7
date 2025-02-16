@@ -1,17 +1,15 @@
 package guru.qa.niffler.test.web;
 
 import com.codeborne.selenide.Selenide;
-
 import guru.qa.niffler.page.LoginPage;
+import guru.qa.niffler.utils.RandomDataUtils;
 import org.junit.jupiter.api.Test;
-
-import java.util.Random;
 
 public class RegisterWebTest extends BaseWebTest {
     @Test
     void shouldRegisterNewUser() {
-        String newUserName = "newUser" + System.currentTimeMillis();
-        String newPassword = "pass!1";
+        String newUserName = RandomDataUtils.randomUsername();
+        String newPassword = RandomDataUtils.randomPassword();
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .clickOnRegisterButton()
@@ -42,8 +40,8 @@ public class RegisterWebTest extends BaseWebTest {
 
     @Test
     void shouldShowErrorIfPasswordAndConfirmPasswordAreNotEqual() {
-        String userName = "newUser" + System.currentTimeMillis() + new Random().nextInt(1, 100);
-        String password = "pass!1";
+        String userName = RandomDataUtils.randomUsername();
+        String password = RandomDataUtils.randomPassword();
 
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .clickOnRegisterButton()

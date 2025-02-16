@@ -18,7 +18,7 @@ public class SpendEntity implements Serializable {
     private Date spendDate;
     private Double amount;
     private String description;
-    private guru.qa.niffler.data.entity.spend.CategoryEntity category;
+    private CategoryEntity category;
 
     public static SpendEntity fromJson(SpendJson json) {
         SpendEntity se = new SpendEntity();
@@ -29,7 +29,7 @@ public class SpendEntity implements Serializable {
         se.setAmount(json.amount());
         se.setDescription(json.description());
         se.setCategory(
-                guru.qa.niffler.data.entity.spend.CategoryEntity.fromJson(
+                CategoryEntity.fromJson(
                         json.category()
                 )
         );

@@ -6,7 +6,7 @@ import guru.qa.niffler.data.dao.impl.AuthAuthorityDaoJdbc;
 import guru.qa.niffler.data.dao.impl.AuthAuthorityDaoSpringJdbc;
 import guru.qa.niffler.data.dao.impl.AuthUserDaoJdbc;
 import guru.qa.niffler.data.dao.impl.AuthUserDaoSpringJdbc;
-import guru.qa.niffler.data.dao.impl.UdUserDaoSpringJdbc;
+import guru.qa.niffler.data.dao.impl.UserdataUserDaoSpringJdbc;
 import guru.qa.niffler.data.dao.impl.UserdataUserDAOJdbc;
 import guru.qa.niffler.data.entity.auth.AuthUserEntity;
 import guru.qa.niffler.data.entity.auth.Authority;
@@ -50,7 +50,7 @@ public class UsersDbClient {
                 .create(authorityEntities);
 
         return UserJson.fromEntity(
-                new UdUserDaoSpringJdbc(dataSource(CFG.userdataJdbcUrl()))
+                new UserdataUserDaoSpringJdbc(dataSource(CFG.userdataJdbcUrl()))
                         .create(
                                 UserdataUserEntity.fromJson(user)
                         ),

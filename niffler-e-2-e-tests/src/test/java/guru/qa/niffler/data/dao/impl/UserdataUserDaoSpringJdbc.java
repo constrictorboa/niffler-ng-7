@@ -10,14 +10,15 @@ import org.springframework.jdbc.support.KeyHolder;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class UdUserDaoSpringJdbc implements UserdataUserDao {
+public class UserdataUserDaoSpringJdbc implements UserdataUserDao {
 
     private final DataSource dataSource;
 
-    public UdUserDaoSpringJdbc(DataSource dataSource) {
+    public UserdataUserDaoSpringJdbc(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -60,11 +61,26 @@ public class UdUserDaoSpringJdbc implements UserdataUserDao {
 
     @Override
     public Optional<UserdataUserEntity> findByUsername(String username) {
-        return Optional.empty();
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject(
+                        "SELECT * FROM \"user\" WHERE username = ?",
+                        UserdataUserEntityRowMapper.instance,
+                        username
+                )
+        );
     }
 
     @Override
     public void deleteUser(UserdataUserEntity user) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update("DELETE FROM \"user\" WHERE id = ?", user.getId());
+    }
 
+    @Override
+    public List<UserdataUserEntity> findAll() {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.query("SELECT * FROM \"user\"",
+                UserdataUserEntityRowMapper.instance);
     }
 }

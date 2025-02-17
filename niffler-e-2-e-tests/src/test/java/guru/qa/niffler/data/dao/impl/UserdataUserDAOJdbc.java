@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -108,6 +110,25 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         )) {
             ps.setObject(1, user.getId());
             ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<UserdataUserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM \"user\""
+        )) {
+            List<UserdataUserEntity> userdataUserEntityList = new ArrayList<>();
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
+                if (rs.next()) {
+                    userdataUserEntityList.add(extractUserEntityFromResultSet(rs));
+                }
+            }
+            return userdataUserEntityList;
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -20,6 +20,11 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    public void create(AuthorityEntity... authority) {
+
+    }
+
+    @Override
     public AuthorityEntity create(AuthorityEntity authority) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO authority (user_id, authority) " +

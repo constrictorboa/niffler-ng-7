@@ -2,7 +2,7 @@ package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.dao.UserdataUserDao;
-import guru.qa.niffler.data.entity.userdata.UserEntity;
+import guru.qa.niffler.data.entity.userdata.UserdataUserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
 import java.sql.Connection;
@@ -22,7 +22,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
     }
 
     @Override
-    public UserEntity create(UserEntity user) {
+    public UserdataUserEntity create(UserdataUserEntity user) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO \"user\" (username, currency, firstname, surname, photo, photo_small, full_name) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -55,7 +55,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
     }
 
     @Override
-    public Optional<UserEntity> findById(UUID id) {
+    public Optional<UserdataUserEntity> findById(UUID id) {
 
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT * from \"user\" WHERE id = ?"
@@ -78,7 +78,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
     }
 
     @Override
-    public Optional<UserEntity> findByUsername(String username) {
+    public Optional<UserdataUserEntity> findByUsername(String username) {
 
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT * from \"user\" WHERE username = ?"
@@ -101,7 +101,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
     }
 
     @Override
-    public void deleteUser(UserEntity user) {
+    public void deleteUser(UserdataUserEntity user) {
 
         try (PreparedStatement ps = connection.prepareStatement(
                 "DELETE FROM \"user\" WHERE id = ?"
@@ -114,8 +114,8 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         }
     }
 
-    private UserEntity extractUserEntityFromResultSet(ResultSet resultSet) throws SQLException {
-        UserEntity userEntity = new UserEntity();
+    private UserdataUserEntity extractUserEntityFromResultSet(ResultSet resultSet) throws SQLException {
+        UserdataUserEntity userEntity = new UserdataUserEntity();
         userEntity.setId(resultSet.getObject("id", UUID.class));
         userEntity.setUsername(resultSet.getString("username"));
         userEntity.setCurrency(CurrencyValues.valueOf(resultSet.getString("currency")));

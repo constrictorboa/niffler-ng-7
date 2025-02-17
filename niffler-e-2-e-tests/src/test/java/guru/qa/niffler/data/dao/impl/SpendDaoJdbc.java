@@ -77,7 +77,7 @@ public class SpendDaoJdbc implements SpendDao {
     }
 
     @Override
-    public List<SpendEntity> findAllByUsename(String username) {
+    public List<SpendEntity> findAllByUsername(String username) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT * FROM spend WHERE username = ?"
         )) {

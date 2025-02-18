@@ -28,7 +28,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
                     if (anno.spendings().length > 0) {
                         Spending spending = anno.spendings()[0];
                         CategoryJson categoryJson = spendDbClient
-                                .findCategoryByUsernameAndCategoryName(anno.username(), spending.category()).orElse(
+                                .findCategoryByUsernameAndCategoryNameSpringJdbc(anno.username(), spending.category()).orElse(
                                         new CategoryJson(
                                                 null,
                                                 spending.category(),
@@ -49,7 +49,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
 
                         context.getStore(NAMESPACE).put(
                                 context.getUniqueId(),
-                                spendDbClient.createSpend(spend)
+                                spendDbClient.createSpendSpringJdbc(spend)
                         );
                     }
                 });

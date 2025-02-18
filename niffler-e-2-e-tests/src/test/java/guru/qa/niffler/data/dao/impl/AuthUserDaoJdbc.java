@@ -11,13 +11,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 public class AuthUserDaoJdbc implements AuthUserDao {
     private static final Config CFG = Config.getInstance();
     private final Connection connection;
-    private static final  PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private static final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     public AuthUserDaoJdbc(Connection connection) {
         this.connection = connection;
@@ -57,5 +59,35 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     @Override
     public Optional<AuthUserEntity> findById(UUID id) {
         return Optional.empty();
+    }
+
+    @Override
+    public List<AuthUserEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM \"user\""
+        )) {
+            List<AuthUserEntity> authUserEntityList = new ArrayList<>();
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
+                if (rs.next()) {
+                    authUserEntityList.add(extractAuthUserEntityFromResultSet(rs));
+                }
+            }
+            return authUserEntityList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private AuthUserEntity extractAuthUserEntityFromResultSet(ResultSet rs) throws SQLException {
+        AuthUserEntity authUserEntity = new AuthUserEntity();
+        authUserEntity.setUsername(rs.getString("username"));
+        authUserEntity.setPassword(null);
+        authUserEntity.setEnabled(rs.getBoolean("enabled"));
+        authUserEntity.setAccountNonExpired(rs.getBoolean("account_non_expired"));
+        authUserEntity.setAccountNonLocked(rs.getBoolean("account_non_locked"));
+        authUserEntity.setCredentialsNonExpired(rs.getBoolean("credentials_non_expired"));
+        return authUserEntity;
     }
 }

@@ -54,6 +54,13 @@ public class CategoryDaoJdbc implements CategoryDao {
     }
 
     @Override
+    public void create(CategoryEntity... category) {
+        for (CategoryEntity ce : category) {
+            create(ce);
+        }
+    }
+
+    @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         try (PreparedStatement ps = connection.prepareStatement(
                 "SELECT * FROM category WHERE id = ?"
@@ -100,6 +107,25 @@ public class CategoryDaoJdbc implements CategoryDao {
         )) {
             List<CategoryEntity> categoryEntityList = new ArrayList<>();
             ps.setObject(1, username);
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
+                if (rs.next()) {
+                    categoryEntityList.add(extractCategoryEntityFromResultSet(rs));
+                }
+            }
+            return categoryEntityList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<CategoryEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM category"
+        )) {
+            List<CategoryEntity> categoryEntityList = new ArrayList<>();
+
             ps.execute();
             try (ResultSet rs = ps.getResultSet()) {
                 if (rs.next()) {

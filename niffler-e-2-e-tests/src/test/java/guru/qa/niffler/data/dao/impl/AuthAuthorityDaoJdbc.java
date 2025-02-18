@@ -2,6 +2,8 @@ package guru.qa.niffler.data.dao.impl;
 
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.data.dao.AuthAuthorityDao;
+import guru.qa.niffler.data.entity.auth.AuthUserEntity;
+import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 
 import java.sql.Connection;
@@ -9,6 +11,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
@@ -21,7 +25,9 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
 
     @Override
     public void create(AuthorityEntity... authority) {
-
+        for (AuthorityEntity ae : authority) {
+            create(ae);
+        }
     }
 
     @Override
@@ -49,5 +55,33 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<AuthorityEntity> findAll() {
+        try (PreparedStatement ps = connection.prepareStatement(
+                "SELECT * FROM authority"
+        )) {
+            List<AuthorityEntity> authorityEntityList = new ArrayList<>();
+            ps.execute();
+            try (ResultSet rs = ps.getResultSet()) {
+                if (rs.next()) {
+                    authorityEntityList.add(extractAuthorityEntityFromResultSet(rs));
+                }
+            }
+            return authorityEntityList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private AuthorityEntity extractAuthorityEntityFromResultSet(ResultSet rs) throws SQLException {
+        AuthorityEntity authorityEntity = new AuthorityEntity();
+        authorityEntity.setId(rs.getObject("id", UUID.class));
+        authorityEntity.setAuthority(Authority.valueOf(rs.getString("authority")));
+        authorityEntity.setUser(new AuthUserEntity());
+        authorityEntity.getUser().setId(rs.getObject("user_id", UUID.class));
+        return authorityEntity;
     }
 }

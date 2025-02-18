@@ -31,7 +31,7 @@ public class CreateCategoryExtension implements BeforeEachCallback, ParameterRes
                                         anno.username(),
                                         anno.categories()[0].archived()
                                 );
-                        CategoryJson createdJson = spendDbClient.createCategorySpringJdbc(newCategory);
+                        CategoryJson createdJson = spendDbClient.createCategory(newCategory);
                         context.getStore(NAMESPACE).put(
                                 context.getUniqueId(),
                                 createdJson
@@ -56,7 +56,7 @@ public class CreateCategoryExtension implements BeforeEachCallback, ParameterRes
         CategoryJson category =
                 (CategoryJson) context.getStore(NAMESPACE).get(context.getUniqueId());
         if (Objects.nonNull(category)) {
-            spendDbClient.deleteCategorySpringJdbc(category);
+            spendDbClient.deleteCategory(category);
         }
     }
 }

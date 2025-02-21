@@ -6,12 +6,10 @@ import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.SpendDbClient;
 import guru.qa.niffler.service.UsersDbClient;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 
-@Disabled
 public class JdbcTest {
 
     @Test
@@ -24,7 +22,7 @@ public class JdbcTest {
                         new Date(),
                         new CategoryJson(
                                 null,
-                                "cat-name-tx-2",
+                                "cat-name-tx-1",
                                 "duck",
                                 false
                         ),
@@ -39,13 +37,97 @@ public class JdbcTest {
     }
 
     @Test
-    void springJdbcTest() {
+    void springJdbcTestWithTransaction() {
         UsersDbClient usersDbClient = new UsersDbClient();
 
         UserJson user = usersDbClient.createUser(
                 new UserJson(
                         null,
-                        "user-test-xa-2",
+                        "springJdbcTestWithTransaction-1",
+                        "firtsname",
+                        "surname",
+                        "fulname",
+                        CurrencyValues.RUB,
+                        null,
+                        null,
+                        null
+                )
+        );
+
+        System.out.println(user);
+    }
+
+    @Test
+    void springJdbcTestWithoutTransaction() {
+        UsersDbClient usersDbClient = new UsersDbClient();
+
+        UserJson user = usersDbClient.createUserSpringWithout(
+                new UserJson(
+                        null,
+                        "createUserSpringWithout-1",
+                        "firtsname",
+                        "surname",
+                        "fulname",
+                        CurrencyValues.RUB,
+                        null,
+                        null,
+                        null
+                )
+        );
+
+        System.out.println(user);
+    }
+
+    @Test
+    void chainedTransactionTest() {
+        UsersDbClient usersDbClient = new UsersDbClient();
+
+        UserJson user = usersDbClient.createUserChainedTransaction(
+                new UserJson(
+                        null,
+                        "user-test-chained-1",
+                        null,
+                        null,
+                        null,
+                        CurrencyValues.RUB,
+                        null,
+                        null,
+                        null
+                )
+        );
+
+        System.out.println(user);
+    }
+
+    @Test
+    void jdbcTestWithTransaction() {
+        UsersDbClient usersDbClient = new UsersDbClient();
+
+        UserJson user = usersDbClient.createUserJdbcWithTransaction(
+                new UserJson(
+                        null,
+                        "createUserJdbcWithTransaction-1",
+                        "firtsname",
+                        "surname",
+                        "fulname",
+                        CurrencyValues.RUB,
+                        null,
+                        null,
+                        null
+                )
+        );
+
+        System.out.println(user);
+    }
+
+    @Test
+    void jdbcTestWithoutTransaction() {
+        UsersDbClient usersDbClient = new UsersDbClient();
+
+        UserJson user = usersDbClient.createUserJdbcWithoutTransaction(
+                new UserJson(
+                        null,
+                        "createUserJdbcWithoutTransaction-1",
                         "firtsname",
                         "surname",
                         "fulname",

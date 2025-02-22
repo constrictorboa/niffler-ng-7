@@ -25,11 +25,11 @@ public record FriendState(
     String photo,
     @JsonProperty("photoSmall")
     String photoSmall,
-    @JsonProperty("friendState")
-    jaxb.userdata.FriendState friendState) {
+    @JsonProperty("friendshipStatus")
+    FriendshipStatus friendshipStatus) {
 
 
-  public static FriendState fromEntity(UserdataUserEntity entity, jaxb.userdata.FriendState friendState) {
+  public static FriendState fromEntity(UserdataUserEntity entity, FriendshipStatus friendshipStatus) {
     return new FriendState(
         entity.getId(),
         entity.getUsername(),
@@ -39,7 +39,7 @@ public record FriendState(
         entity.getCurrency(),
         entity.getPhoto() != null && entity.getPhoto().length > 0 ? new String(entity.getPhoto(), StandardCharsets.UTF_8) : null,
         entity.getPhotoSmall() != null && entity.getPhotoSmall().length > 0 ? new String(entity.getPhotoSmall(), StandardCharsets.UTF_8) : null,
-        friendState
+        friendshipStatus
     );
   }
 }

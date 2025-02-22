@@ -22,14 +22,14 @@ public class JdbcTest {
                         new Date(),
                         new CategoryJson(
                                 null,
-                                "cat-name-tx-1",
+                                "cat-name-tx-3",
                                 "duck",
                                 false
                         ),
                         CurrencyValues.RUB,
                         1000.0,
-                        "spend-name-tx",
-                        null
+                        "spend-name-tx-3",
+                        "duck"
                 )
         );
 

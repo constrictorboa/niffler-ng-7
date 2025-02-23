@@ -9,6 +9,8 @@ import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.SpendDbClient;
 import guru.qa.niffler.service.UsersDbClient;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Date;
 import java.util.UUID;
@@ -39,114 +41,25 @@ public class JdbcTest {
         System.out.println(spend);
     }
 
-    @Test
-    void springJdbcTestWithTransaction() {
-        UsersDbClient usersDbClient = new UsersDbClient();
+    static UsersDbClient usersDbClient = new UsersDbClient();
+
+    @ValueSource(strings = {
+            "valentin-10"
+    })
+    @ParameterizedTest
+    void springJdbcTest(String uname) {
 
         UserJson user = usersDbClient.createUser(
-                new UserJson(
-                        null,
-                        "springJdbcTestWithTransaction-1",
-                        "firtsname",
-                        "surname",
-                        "fulname",
-                        CurrencyValues.RUB,
-                        null,
-                        null,
-                        null
-                )
+                uname,
+                "12345"
         );
 
-        System.out.println(user);
-    }
-
-    @Test
-    void springJdbcTestWithoutTransaction() {
-        UsersDbClient usersDbClient = new UsersDbClient();
-
-        UserJson user = usersDbClient.createUserSpringWithout(
-                new UserJson(
-                        null,
-                        "createUserSpringWithout-1",
-                        "firtsname",
-                        "surname",
-                        "fulname",
-                        CurrencyValues.RUB,
-                        null,
-                        null,
-                        null
-                )
-        );
-
-        System.out.println(user);
-    }
-
-    @Test
-    void chainedTransactionTest() {
-        UsersDbClient usersDbClient = new UsersDbClient();
-
-        UserJson user = usersDbClient.createUserChainedTransaction(
-                new UserJson(
-                        null,
-                        "user-test-chained-1",
-                        null,
-                        null,
-                        null,
-                        CurrencyValues.RUB,
-                        null,
-                        null,
-                        null
-                )
-        );
-
-        System.out.println(user);
-    }
-
-    @Test
-    void jdbcTestWithTransaction() {
-        UsersDbClient usersDbClient = new UsersDbClient();
-
-        UserJson user = usersDbClient.createUserJdbcWithTransaction(
-                new UserJson(
-                        null,
-                        "createUserJdbcWithTransaction-1",
-                        "firtsname",
-                        "surname",
-                        "fulname",
-                        CurrencyValues.RUB,
-                        null,
-                        null,
-                        null
-                )
-        );
-
-        System.out.println(user);
-    }
-
-    @Test
-    void jdbcTestWithoutTransaction() {
-        UsersDbClient usersDbClient = new UsersDbClient();
-
-        UserJson user = usersDbClient.createUserJdbcWithoutTransaction(
-                new UserJson(
-                        null,
-                        "createUserJdbcWithoutTransaction-1",
-                        "firtsname",
-                        "surname",
-                        "fulname",
-                        CurrencyValues.RUB,
-                        null,
-                        null,
-                        null
-                )
-        );
-
-        System.out.println(user);
+        usersDbClient.addIncomeInvitation(user, 1);
+        usersDbClient.addOutcomeInvitation(user, 1);
     }
 
     @Test
     void test() {
-        UsersDbClient usersDbClient = new UsersDbClient();
         UserdataUserRepositorySpringJdbc userdataUserRepositorySpringJdbc = new UserdataUserRepositorySpringJdbc();
         UserdataUserEntity userdataUserEntity = userdataUserRepositorySpringJdbc
                 .findByUserId(UUID.fromString("0d52a139-d4ba-4ed8-99a3-4ff0dd3b8fb0")).get();

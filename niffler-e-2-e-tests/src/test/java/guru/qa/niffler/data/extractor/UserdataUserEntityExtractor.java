@@ -65,6 +65,8 @@ public class UserdataUserEntityExtractor implements ResultSetExtractor<UserdataU
             userMap.put(userId, userdataUserEntity);
 
         }
+        if (userMap.isEmpty())
+            return null;
         return userMap.get(userId);
     }
 }

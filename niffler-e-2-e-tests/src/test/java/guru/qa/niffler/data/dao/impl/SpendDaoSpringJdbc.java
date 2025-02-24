@@ -45,6 +45,28 @@ public class SpendDaoSpringJdbc implements SpendDao {
     }
 
     @Override
+    public SpendEntity update(SpendEntity spend) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
+        jdbcTemplate.update(con -> {
+            PreparedStatement ps = con.prepareStatement(
+                    "UPDATE spend SET username=?, spend_date=?, currency=?, amount=?, description=?, category_id=? " +
+                            "WHERE id=?"
+            );
+            ps.setString(1, spend.getUsername());
+            ps.setDate(2, spend.getSpendDate());
+            ps.setString(3, spend.getCurrency().name());
+            ps.setDouble(4, spend.getAmount());
+            ps.setString(5, spend.getDescription());
+            ps.setObject(6, spend.getCategory().getId());
+            ps.setObject(7, spend.getId());
+
+            return ps;
+        });
+
+        return spend;
+    }
+
+    @Override
     public void create(SpendEntity... spend) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         jdbcTemplate.batchUpdate(
@@ -99,5 +121,11 @@ public class SpendDaoSpringJdbc implements SpendDao {
     public void deleteSpend(SpendEntity spend) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         jdbcTemplate.update("DELETE FROM spend WHERE id = ?", spend.getId());
+    }
+
+    @Override
+    public void deleteSpendByCategoryId(UUID id) {
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
+        jdbcTemplate.update("DELETE FROM spend WHERE category_id = ?", id);
     }
 }

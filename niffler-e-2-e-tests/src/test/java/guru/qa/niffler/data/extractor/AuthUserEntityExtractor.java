@@ -40,11 +40,15 @@ public class AuthUserEntityExtractor implements ResultSetExtractor<AuthUserEntit
                 return authUser;
             });
 
-            AuthorityEntity authority = new AuthorityEntity();
-            authority.setId(rs.getObject("autority_id", UUID.class));
-            authority.setAuthority(Authority.valueOf(rs.getString("authority")));
-            user.getAuthorities().add(authority);
+            if (rs.getString("authority") != null) {
+                AuthorityEntity authority = new AuthorityEntity();
+                authority.setId(rs.getObject("authority_id", UUID.class));
+                authority.setAuthority(Authority.valueOf(rs.getString("authority")));
+                user.getAuthorities().add(authority);
+            }
         }
+        if (userMap.isEmpty())
+            return null;
         return userMap.get(userId);
     }
 }

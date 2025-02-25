@@ -53,8 +53,44 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
 
     @Override
+    public AuthUserEntity update(AuthUserEntity user) {
+        try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
+                "UPDATE \"user\" SET username=?, password=?, enabled=?, account_non_expired=?, account_non_locked=?, credentials_non_expired=? " +
+                        "WHERE id=?")) {
+            ps.setString(1, user.getUsername());
+            ps.setString(2, pe.encode(user.getPassword()));
+            ps.setBoolean(3, user.getEnabled());
+            ps.setBoolean(4, user.getAccountNonExpired());
+            ps.setBoolean(5, user.getAccountNonLocked());
+            ps.setBoolean(6, user.getCredentialsNonExpired());
+            ps.setObject(7, user.getId());
+            ps.executeUpdate();
+
+            return user;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public Optional<AuthUserEntity> findById(UUID id) {
-        return Optional.empty();
+        try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
+                "SELECT * FROM \"user\" WHERE id=?"
+        )) {
+            ps.setObject(1, id);
+            ps.execute();
+
+            try (ResultSet rs = ps.getResultSet()) {
+                if (rs.next()) {
+                    return Optional.of(extractAuthUserEntityFromResultSet(rs));
+                }
+            }
+            return Optional.empty();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -70,6 +106,20 @@ public class AuthUserDaoJdbc implements AuthUserDao {
                 }
             }
             return authUserEntityList;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteById(AuthUserEntity authUserEntity) {
+        try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
+                "DELETE FROM \"user\" WHERE id=?",
+                Statement.RETURN_GENERATED_KEYS
+        )) {
+            ps.setObject(1, authUserEntity.getId());
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -11,7 +11,7 @@ import guru.qa.niffler.model.SpendJson;
 
 import java.util.Optional;
 
-public class SpendDbClient {
+public class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
     private final SpendRepositoryHibernate spendRepositoryHibernate = new SpendRepositoryHibernate();
@@ -25,6 +25,7 @@ public class SpendDbClient {
     );
 
 
+    @Override
     public SpendJson createSpend(SpendJson spend) {
         return xaTransactionTemplate.execute(() -> {
                     SpendEntity spendEntity = SpendEntity.fromJson(spend);
@@ -37,6 +38,7 @@ public class SpendDbClient {
         );
     }
 
+    @Override
     public CategoryJson createCategory(CategoryJson categoryJson) {
         return xaTransactionTemplate.execute(() -> {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
@@ -47,6 +49,7 @@ public class SpendDbClient {
         );
     }
 
+    @Override
     public void deleteCategory(CategoryJson categoryJson) {
         xaTransactionTemplate.execute(() -> {
                     CategoryEntity categoryEntity = CategoryEntity.fromJson(categoryJson);
@@ -57,6 +60,7 @@ public class SpendDbClient {
 
     }
 
+    @Override
     public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         return xaTransactionTemplate.execute(() -> {
                     return spendRepositoryHibernate.findCategoryByUsernameAndCategoryName(username, categoryName)

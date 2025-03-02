@@ -9,6 +9,8 @@ import java.util.UUID;
 public interface SpendDao {
     SpendEntity create(SpendEntity spend);
 
+    SpendEntity update(SpendEntity spend);
+
     void create(SpendEntity... spend);
 
     Optional<SpendEntity> findSpendById(UUID id);
@@ -18,4 +20,6 @@ public interface SpendDao {
     List<SpendEntity> findAll();
 
     void deleteSpend(SpendEntity spend);
+
+    void deleteSpendByCategoryId(UUID id);
 }

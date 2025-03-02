@@ -54,6 +54,22 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    public AuthorityEntity update(AuthorityEntity authority) {
+        try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
+                "UPDATE authority SET user_id=?, authority=? WHERE id=?")) {
+            ps.setObject(1, authority.getUser().getId());
+            ps.setString(2, authority.getAuthority().name());
+            ps.setObject(3, authority.getId());
+            ps.executeUpdate();
+
+            return authority;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public List<AuthorityEntity> findAll() {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM authority"
@@ -67,6 +83,17 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
             }
             return authorityEntityList;
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteByUserId(UUID userId) {
+        try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
+                "DELETE FROM authority WHERE user_id=?")) {
+            ps.setObject(1, userId);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

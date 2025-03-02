@@ -1,7 +1,5 @@
 package guru.qa.niffler.test.web;
 
-import guru.qa.niffler.data.entity.userdata.UserdataUserEntity;
-import guru.qa.niffler.data.repository.impl.UserdataUserRepositorySpringJdbc;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
@@ -13,7 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.Date;
-import java.util.UUID;
 
 public class JdbcTest {
 
@@ -56,15 +53,5 @@ public class JdbcTest {
 
         usersDbClient.addIncomeInvitation(user, 1);
         usersDbClient.addOutcomeInvitation(user, 1);
-    }
-
-    @Test
-    void test() {
-        UserdataUserRepositorySpringJdbc userdataUserRepositorySpringJdbc = new UserdataUserRepositorySpringJdbc();
-        UserdataUserEntity userdataUserEntity = userdataUserRepositorySpringJdbc
-                .findByUserId(UUID.fromString("0d52a139-d4ba-4ed8-99a3-4ff0dd3b8fb0")).get();
-
-
-        System.out.println(userdataUserEntity);
     }
 }

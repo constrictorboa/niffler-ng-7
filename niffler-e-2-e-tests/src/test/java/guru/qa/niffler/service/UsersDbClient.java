@@ -9,37 +9,29 @@ import guru.qa.niffler.data.repository.AuthUserRepository;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
 import guru.qa.niffler.data.repository.impl.AuthUserRepositoryHibernate;
 import guru.qa.niffler.data.repository.impl.UserdataUserRepositoryHibernate;
-import guru.qa.niffler.data.tpl.DataSources;
 import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.UserJson;
-import org.springframework.jdbc.support.JdbcTransactionManager;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Arrays;
 
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 
-public class UsersDbClient {
+public class UsersDbClient implements UsersClient {
     private static final Config CFG = Config.getInstance();
     private static final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
     private final AuthUserRepository authUserRepository = new AuthUserRepositoryHibernate();
     private final UserdataUserRepository userdataUserRepository = new UserdataUserRepositoryHibernate();
 
-    private final TransactionTemplate txTemplate = new TransactionTemplate(
-            new JdbcTransactionManager(
-                    DataSources.dataSource(CFG.authJdbcUrl())
-            )
-    );
-
     private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(
             CFG.authJdbcUrl(),
             CFG.userdataJdbcUrl()
     );
 
+    @Override
     public UserJson createUser(String username, String password) {
         return xaTransactionTemplate.execute(() -> {
                     AuthUserEntity authUser = authUserEntity(username, password);
@@ -52,6 +44,7 @@ public class UsersDbClient {
         );
     }
 
+    @Override
     public void addIncomeInvitation(UserJson targetUser, int count) {
         if (count > 0) {
             UserdataUserEntity targetEntity = userdataUserRepository.findById(
@@ -63,7 +56,7 @@ public class UsersDbClient {
                             String username = randomUsername();
                             AuthUserEntity authUser = authUserEntity(username, "12345");
                             authUserRepository.create(authUser);
-                    UserdataUserEntity adressee = userdataUserRepository.create(userdataUserEntity(username));
+                            UserdataUserEntity adressee = userdataUserRepository.create(userdataUserEntity(username));
                             userdataUserRepository.addIncomeInvitation(targetEntity, adressee);
                             return null;
                         }
@@ -72,6 +65,7 @@ public class UsersDbClient {
         }
     }
 
+    @Override
     public void addOutcomeInvitation(UserJson targetUser, int count) {
         if (count > 0) {
             UserdataUserEntity targetEntity = userdataUserRepository.findById(
@@ -83,7 +77,7 @@ public class UsersDbClient {
                             String username = randomUsername();
                             AuthUserEntity authUser = authUserEntity(username, "12345");
                             authUserRepository.create(authUser);
-                    UserdataUserEntity adressee = userdataUserRepository.create(userdataUserEntity(username));
+                            UserdataUserEntity adressee = userdataUserRepository.create(userdataUserEntity(username));
                             userdataUserRepository.addOutcomeInvitation(targetEntity, adressee);
                             return null;
                         }
@@ -92,8 +86,25 @@ public class UsersDbClient {
         }
     }
 
-    void addFriend(UserJson targetUser, int count) {
+    @Override
+    public void addFriend(UserJson targetUser, int count) {
+        if (count > 0) {
+            UserdataUserEntity targetEntity = userdataUserRepository.findById(
+                    targetUser.id()
+            ).orElseThrow();
 
+            for (int i = 0; i < count; i++) {
+                xaTransactionTemplate.execute(() -> {
+                            String username = randomUsername();
+                            userdataUserRepository.addFriend(
+                                    targetEntity,
+                                    UserdataUserEntity.fromJson(createUser(username, "12345"))
+                            );
+                            return null;
+                        }
+                );
+            }
+        }
     }
 
     private UserdataUserEntity userdataUserEntity(String username) {

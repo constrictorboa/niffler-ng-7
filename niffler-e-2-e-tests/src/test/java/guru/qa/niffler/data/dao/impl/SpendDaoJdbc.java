@@ -53,6 +53,26 @@ public class SpendDaoJdbc implements SpendDao {
     }
 
     @Override
+    public SpendEntity update(SpendEntity spend) {
+        try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
+                "UPDATE spend SET username=?, spend_date=?, currency=?, amount=?, description=?, category_id=? " +
+                        "WHERE id=?")) {
+            ps.setString(1, spend.getUsername());
+            ps.setDate(2, spend.getSpendDate());
+            ps.setString(3, spend.getCurrency().name());
+            ps.setDouble(4, spend.getAmount());
+            ps.setString(5, spend.getDescription());
+            ps.setObject(6, spend.getCategory().getId());
+            ps.setObject(7, spend.getId());
+
+            ps.executeUpdate();
+            return spend;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void create(SpendEntity... spend) {
         for (SpendEntity se : spend) {
             create(se);
@@ -124,6 +144,19 @@ public class SpendDaoJdbc implements SpendDao {
                 "DELETE FROM spend WHERE id = ?"
         )) {
             ps.setObject(1, spend.getId());
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteSpendByCategoryId(UUID id) {
+        try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
+                "DELETE FROM spend WHERE category_id = ?"
+        )) {
+            ps.setObject(1, id);
             ps.executeUpdate();
 
         } catch (SQLException e) {

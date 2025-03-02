@@ -13,9 +13,13 @@ public interface UserdataUserRepository {
 
     Optional<UserdataUserEntity> findByUsername(String username);
 
+    UserdataUserEntity update(UserdataUserEntity user);
+
     void addIncomeInvitation(UserdataUserEntity requester, UserdataUserEntity addressee);
 
     void addOutcomeInvitation(UserdataUserEntity requester, UserdataUserEntity addressee);
 
     void addFriend(UserdataUserEntity requester, UserdataUserEntity addressee);
+
+    void remove(UserdataUserEntity user);
 }

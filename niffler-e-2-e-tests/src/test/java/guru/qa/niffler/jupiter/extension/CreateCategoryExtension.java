@@ -1,9 +1,12 @@
 package guru.qa.niffler.jupiter.extension;
 
+import com.github.jknack.handlebars.internal.lang3.ArrayUtils;
+import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.meta.User;
 import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.service.SpendClient;
 import guru.qa.niffler.service.SpendDbClient;
-import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.ParameterContext;
@@ -11,35 +14,57 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import java.util.Objects;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CreateCategoryExtension implements BeforeEachCallback, ParameterResolver, AfterEachCallback {
+import static guru.qa.niffler.utils.RandomDataUtils.randomCategoryName;
+
+public class CreateCategoryExtension implements BeforeEachCallback, ParameterResolver {
     public static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace.create(CreateCategoryExtension.class);
 
-    private final SpendDbClient spendDbClient = new SpendDbClient();
+    private final SpendClient spendClient = new SpendDbClient();
 
     @Override
-    public void beforeEach(ExtensionContext context) {
+    public void beforeEach(ExtensionContext context) throws Exception {
         AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
-                .ifPresent(anno -> {
-                    if (anno.categories().length > 0) {
-                        CategoryJson newCategory =
-                                new CategoryJson(
-                                        null,
-                                        "category " + System.currentTimeMillis() + new Random().nextInt(1, 100),
-                                        anno.username(),
-                                        anno.categories()[0].archived()
-                                );
-                        CategoryJson createdJson = spendDbClient.createCategory(newCategory);
-                        context.getStore(NAMESPACE).put(
+                .ifPresent(userAnno -> {
+                    if (ArrayUtils.isNotEmpty(userAnno.categories())) {
+                        UserJson user = context.getStore(UserExtension.NAMESPACE).get(
                                 context.getUniqueId(),
-                                createdJson
-
+                                UserJson.class
                         );
+
+                        final String username = user != null
+                                ? user.username()
+                                : userAnno.username();
+
+                        final List<CategoryJson> createdCategories = new ArrayList<>();
+
+                        for (Category categoryAnno : userAnno.categories()) {
+                            CategoryJson category = new CategoryJson(
+                                    null,
+                                    "".equals(categoryAnno.name()) ? randomCategoryName() : categoryAnno.name(),
+                                    username,
+                                    categoryAnno.archived()
+                            );
+                            createdCategories.add(
+                                    spendClient.createCategory(category)
+                            );
+                        }
+                        if (user != null) {
+                            user.testData().categories().addAll(
+                                    createdCategories
+                            );
+                        } else {
+                            context.getStore(NAMESPACE).put(
+                                    context.getUniqueId(),
+                                    createdCategories
+                            );
+                        }
                     }
                 });
     }
+
 
     @Override
     public boolean supportsParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
@@ -47,16 +72,10 @@ public class CreateCategoryExtension implements BeforeEachCallback, ParameterRes
     }
 
     @Override
-    public Object resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
-        return extensionContext.getStore(CreateCategoryExtension.NAMESPACE).get(extensionContext.getUniqueId(), CategoryJson.class);
-    }
-
-    @Override
-    public void afterEach(ExtensionContext context) {
-        CategoryJson category =
-                (CategoryJson) context.getStore(NAMESPACE).get(context.getUniqueId());
-        if (Objects.nonNull(category)) {
-            spendDbClient.deleteCategory(category);
-        }
+    @SuppressWarnings("unchecked")
+    public CategoryJson[] resolveParameter(ParameterContext parameterContext, ExtensionContext extensionContext) throws ParameterResolutionException {
+        return (CategoryJson[]) extensionContext.getStore(NAMESPACE).get(extensionContext.getUniqueId(), List.class)
+                .stream()
+                .toArray(CategoryJson[]::new);
     }
 }

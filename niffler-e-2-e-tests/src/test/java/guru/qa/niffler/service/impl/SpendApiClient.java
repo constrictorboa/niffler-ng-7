@@ -106,7 +106,19 @@ public class SpendApiClient implements SpendClient {
 
     @Override
     public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
-        return Optional.empty();
+        final Response<List<CategoryJson>> response;
+        try {
+            response = spendApi.getCategories(username, false)
+                    .execute();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        assertEquals(200, response.code());
+        return response
+                .body()
+                .stream()
+                .filter(c -> c.name().equals(categoryName))
+                .findFirst();
     }
 
     public CategoryJson updateCategory(CategoryJson category) {

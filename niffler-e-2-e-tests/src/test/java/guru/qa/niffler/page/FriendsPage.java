@@ -14,6 +14,7 @@ public class FriendsPage {
     private final ElementsCollection requestsTable = $("#requests").$$("tr");
     private final ElementsCollection allPeopleTable = $("#all").$$("tr");
     private final SelenideElement allPeopleButton = $("a[href='/people/all']");
+    private final SelenideElement searchField = $("input[placeholder='Search']");
 
     public FriendsPage clickOnAllFriendsButton() {
         allPeopleButton.click();
@@ -21,11 +22,13 @@ public class FriendsPage {
     }
 
     public FriendsPage checkThatFriendsTableContainsFriend(String friendName) {
+        searchField.setValue(friendName).pressEnter();
         friendsTable.find(text(friendName)).should(visible);
         return this;
     }
 
     public FriendsPage checkThatRequestsTableContainsRequest(String friendName) {
+        searchField.setValue(friendName).pressEnter();
         requestsTable
                 .find(text(friendName))
                 .should(visible);

@@ -3,12 +3,16 @@ package guru.qa.niffler.page;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
+@ParametersAreNonnullByDefault
 public class FriendsPage {
     private final ElementsCollection friendsTable = $("#friends").$$("tr");
     private final ElementsCollection requestsTable = $("#requests").$$("tr");
@@ -21,12 +25,14 @@ public class FriendsPage {
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatFriendsTableContainsFriend(String friendName) {
         searchField.setValue(friendName).pressEnter();
         friendsTable.find(text(friendName)).should(visible);
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatRequestsTableContainsRequest(String friendName) {
         searchField.setValue(friendName).pressEnter();
         requestsTable
@@ -35,12 +41,14 @@ public class FriendsPage {
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatTableEmpty() {
         friendsTable.shouldHave(size(0));
         requestsTable.shouldHave(size(0));
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatUnfriendButtonVisible(String friendName) {
         friendsTable
                 .find(text(friendName))
@@ -49,6 +57,7 @@ public class FriendsPage {
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatAcceptButtonVisible(String friendName) {
         requestsTable
                 .find(text(friendName))
@@ -57,6 +66,7 @@ public class FriendsPage {
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatDeclineButtonVisible(String friendName) {
         requestsTable
                 .find(text(friendName))
@@ -65,6 +75,7 @@ public class FriendsPage {
         return this;
     }
 
+    @Nonnull
     public FriendsPage checkThatOutcomeRequestVisible(String friendName) {
         allPeopleTable
                 .find(text(friendName))

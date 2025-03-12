@@ -7,17 +7,21 @@ import guru.qa.niffler.data.entity.userdata.FriendshipStatus;
 import guru.qa.niffler.data.entity.userdata.UserdataUserEntity;
 import guru.qa.niffler.data.extractor.UserdataUserEntityExtractor;
 import guru.qa.niffler.data.repository.UserdataUserRepository;
-import guru.qa.niffler.data.tpl.DataSources;
+import guru.qa.niffler.data.jdbc.DataSources;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.UUID;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository {
     private static final Config CFG = Config.getInstance();
 
     private final UserdataUserDao userdataUserDao = new UserdataUserDaoSpringJdbc();
 
+    @Nonnull
     @Override
     public Optional<UserdataUserEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
@@ -27,16 +31,20 @@ public class UserdataUserRepositorySpringJdbc implements UserdataUserRepository 
 
     }
 
+    @Nonnull
     @Override
     public UserdataUserEntity create(UserdataUserEntity user) {
         return userdataUserDao.create(user);
     }
 
+    @Nonnull
     @Override
     public Optional<UserdataUserEntity> findByUsername(String username) {
         return userdataUserDao.findByUsername(username);
     }
 
+
+    @Nonnull
     @Override
     public UserdataUserEntity update(UserdataUserEntity user) {
         return userdataUserDao.update(user);

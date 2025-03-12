@@ -10,8 +10,12 @@ import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.service.SpendClient;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 
+
+@ParametersAreNonnullByDefault
 public class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
@@ -26,6 +30,7 @@ public class SpendDbClient implements SpendClient {
     );
 
 
+    @Nonnull
     @Override
     public SpendJson createSpend(SpendJson spend) {
         return xaTransactionTemplate.execute(() -> SpendJson.fromEntity(
@@ -34,6 +39,7 @@ public class SpendDbClient implements SpendClient {
         );
     }
 
+    @Nonnull
     @Override
     public CategoryJson createCategory(CategoryJson category) {
         return xaTransactionTemplate.execute(() -> CategoryJson.fromEntity(

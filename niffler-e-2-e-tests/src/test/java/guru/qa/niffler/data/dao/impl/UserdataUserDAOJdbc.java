@@ -6,6 +6,8 @@ import guru.qa.niffler.data.entity.userdata.FriendshipEntity;
 import guru.qa.niffler.data.entity.userdata.UserdataUserEntity;
 import guru.qa.niffler.model.CurrencyValues;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,11 +17,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static guru.qa.niffler.data.tpl.Connections.holder;
+import static guru.qa.niffler.data.jdbc.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class UserdataUserDAOJdbc implements UserdataUserDao {
     private static final Config CFG = Config.getInstance();
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public UserdataUserEntity create(UserdataUserEntity user) {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -53,6 +58,8 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         }
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public UserdataUserEntity update(UserdataUserEntity user) {
         try (PreparedStatement usersPs = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(
@@ -85,6 +92,8 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         return user;
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public Optional<UserdataUserEntity> findById(UUID id) {
 
@@ -108,6 +117,8 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         }
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public Optional<UserdataUserEntity> findByUsername(String username) {
 
@@ -145,6 +156,8 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         }
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public List<UserdataUserEntity> findAll() {
         try (PreparedStatement ps = holder(CFG.userdataJdbcUrl()).connection().prepareStatement(

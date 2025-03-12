@@ -19,11 +19,13 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 import static java.util.Objects.requireNonNull;
 
+@ParametersAreNonnullByDefault
 public class UsersDbClient implements UsersClient {
     private static final Config CFG = Config.getInstance();
     private static final PasswordEncoder pe = PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -34,6 +36,7 @@ public class UsersDbClient implements UsersClient {
 
     private final XaTransactionTemplate xaTransactionTemplate = new XaTransactionTemplate(CFG.authJdbcUrl(), CFG.userdataJdbcUrl());
 
+    @Nonnull
     @Override
     public UserJson createUser(String username, String password) {
         return xaTransactionTemplate.execute(() -> {
@@ -122,6 +125,7 @@ public class UsersDbClient implements UsersClient {
         }
     }
 
+    @Nonnull
     private UserdataUserEntity userdataUserEntity(String username) {
         UserdataUserEntity ue = new UserdataUserEntity();
         ue.setUsername(username);
@@ -129,6 +133,7 @@ public class UsersDbClient implements UsersClient {
         return ue;
     }
 
+    @Nonnull
     private AuthUserEntity authUserEntity(String username, String password) {
         AuthUserEntity authUser = new AuthUserEntity();
         authUser.setUsername(username);

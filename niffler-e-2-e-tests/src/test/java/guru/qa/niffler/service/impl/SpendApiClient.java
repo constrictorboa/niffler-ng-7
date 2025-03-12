@@ -1,9 +1,11 @@
-package guru.qa.niffler.api;
+package guru.qa.niffler.service.impl;
 
+import guru.qa.niffler.api.SpendApi;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
 import guru.qa.niffler.model.SpendJson;
+import guru.qa.niffler.service.SpendClient;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
@@ -11,10 +13,11 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SpendApiClient {
+public class SpendApiClient implements SpendClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Config.getInstance().spendUrl())
@@ -94,6 +97,28 @@ public class SpendApiClient {
         }
         assertEquals(200, response.code());
         return response.body();
+    }
+
+    @Override
+    public void deleteCategory(CategoryJson categoryJson) {
+        throw new UnsupportedOperationException("Can`t delete category using API");
+    }
+
+    @Override
+    public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
+        final Response<List<CategoryJson>> response;
+        try {
+            response = spendApi.getCategories(username, false)
+                    .execute();
+        } catch (IOException e) {
+            throw new AssertionError(e);
+        }
+        assertEquals(200, response.code());
+        return response
+                .body()
+                .stream()
+                .filter(c -> c.name().equals(categoryName))
+                .findFirst();
     }
 
     public CategoryJson updateCategory(CategoryJson category) {

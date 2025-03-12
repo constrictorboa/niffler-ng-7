@@ -15,8 +15,8 @@ public class FriendsWebTest extends BaseWebTest {
                 .login(user.username(), user.testData().password())
                 .clickOnMenuButton()
                 .clickOnFriendsButton()
-                .checkThatFriendsTableContainsFriend(user.testData().friendsUsernames()[0])
-                .checkThatUnfriendButtonVisible(user.testData().friendsUsernames()[0]);
+                .checkThatFriendsTableContainsFriend(user.getFirstFriendsUsername())
+                .checkThatUnfriendButtonVisible(user.getFirstFriendsUsername());
     }
 
     @User

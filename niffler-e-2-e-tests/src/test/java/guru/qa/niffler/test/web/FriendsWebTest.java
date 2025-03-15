@@ -13,8 +13,7 @@ public class FriendsWebTest extends BaseWebTest {
     void friendShouldBePresentInFriendsTable( UserJson user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
-                .clickOnMenuButton()
-                .clickOnFriendsButton()
+                .toFriendsPage()
                 .checkThatFriendsTableContainsFriend(user.getFirstFriendsUsername())
                 .checkThatUnfriendButtonVisible(user.getFirstFriendsUsername());
     }
@@ -24,8 +23,7 @@ public class FriendsWebTest extends BaseWebTest {
     void friendTableShouldBeEmptyForNewUser(UserJson user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
-                .clickOnMenuButton()
-                .clickOnFriendsButton()
+                .toFriendsPage()
                 .checkThatTableEmpty();
     }
 
@@ -35,8 +33,7 @@ public class FriendsWebTest extends BaseWebTest {
     void incomeInvitationBePresentInFriendsTable(UserJson user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
-                .clickOnMenuButton()
-                .clickOnFriendsButton()
+                .toFriendsPage()
                 .checkThatRequestsTableContainsRequest(user.testData().incomeInvitationsUsernames()[0])
                 .checkThatAcceptButtonVisible(user.testData().incomeInvitationsUsernames()[0])
                 .checkThatDeclineButtonVisible(user.testData().incomeInvitationsUsernames()[0]);
@@ -48,10 +45,30 @@ public class FriendsWebTest extends BaseWebTest {
     void outcomeInvitationBePresentInAllPeopleTable(UserJson user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
-                .clickOnMenuButton()
-                .clickOnFriendsButton()
+                .toFriendsPage()
                 .checkThatTableEmpty()
                 .clickOnAllFriendsButton()
                 .checkThatOutcomeRequestVisible(user.testData().outcomeInvitationsUsernames()[0]);
+    }
+
+    @User(incomeInvitations = 1)
+    @Test
+    void friendShouldBeAccept(UserJson user) {
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .toFriendsPage()
+                .clickAcceptButton(user.testData().incomeInvitationsUsernames()[0])
+                .checkThatFriendsTableContainsFriend(user.testData().incomeInvitationsUsernames()[0])
+                .checkThatUnfriendButtonVisible(user.testData().incomeInvitationsUsernames()[0]);
+    }
+
+    @User(incomeInvitations = 1)
+    @Test
+    void friendShouldBeDecline(UserJson user) {
+        Selenide.open(CFG.frontUrl(), LoginPage.class)
+                .login(user.username(), user.testData().password())
+                .toFriendsPage()
+                .clickDeclineButton(user.testData().incomeInvitationsUsernames()[0])
+                .checkThatTableEmpty();
     }
 }

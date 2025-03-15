@@ -83,6 +83,7 @@ public class UserdataUserDaoSpringJdbc implements UserdataUserDao {
     }
 
     @Override
+    @Nonnull
     public Optional<UserdataUserEntity> findById(UUID id) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.userdataJdbcUrl()));
         try {

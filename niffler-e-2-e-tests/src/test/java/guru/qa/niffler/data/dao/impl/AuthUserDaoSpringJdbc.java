@@ -49,6 +49,7 @@ public class AuthUserDaoSpringJdbc implements AuthUserDao {
     }
 
     @Override
+    @Nonnull
     public AuthUserEntity update(AuthUserEntity user) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         jdbcTemplate.update(con -> {

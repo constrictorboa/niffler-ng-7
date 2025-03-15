@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 @ParametersAreNonnullByDefault
@@ -32,7 +33,7 @@ public class SpendApiClient implements SpendClient {
 
     private final SpendApi spendApi = retrofit.create(SpendApi.class);
 
-    @Nullable
+    @Nonnull
     public SpendJson createSpend(SpendJson spend) {
         final Response<SpendJson> response;
         try {
@@ -42,6 +43,7 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(201, response.code());
+        assertNotEquals(null, response.body());
         return response.body();
     }
 
@@ -58,6 +60,7 @@ public class SpendApiClient implements SpendClient {
         return response.body();
     }
 
+    @Nullable
     public SpendJson getSpend(String id, String username) {
         final Response<SpendJson> response;
         try {
@@ -98,7 +101,7 @@ public class SpendApiClient implements SpendClient {
         }
     }
 
-    @Nullable
+    @Nonnull
     public CategoryJson createCategory(CategoryJson category) {
         final Response<CategoryJson> response;
         try {
@@ -108,6 +111,7 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(200, response.code());
+        assertNotEquals(null, response.body());
         return response.body();
     }
 
@@ -117,6 +121,7 @@ public class SpendApiClient implements SpendClient {
     }
 
     @Override
+    @Nullable
     public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         final Response<List<CategoryJson>> response;
         try {

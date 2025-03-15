@@ -13,6 +13,7 @@ public interface AuthUserDao {
     @Nonnull
     AuthUserEntity create(AuthUserEntity user);
 
+    @Nonnull
     AuthUserEntity update(AuthUserEntity user);
 
     @Nonnull

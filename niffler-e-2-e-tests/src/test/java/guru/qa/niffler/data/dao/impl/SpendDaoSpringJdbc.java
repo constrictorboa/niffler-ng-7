@@ -115,6 +115,7 @@ public class SpendDaoSpringJdbc implements SpendDao {
     }
 
     @Override
+    @Nonnull
     public List<SpendEntity> findAllByUsername(String username) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return jdbcTemplate.query(String.format("SELECT * FROM spend WHERE username = %s", username),

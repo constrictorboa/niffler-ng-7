@@ -58,6 +58,7 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     }
 
     @Override
+    @Nonnull
     public AuthUserEntity update(AuthUserEntity user) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "UPDATE \"user\" SET username=?, password=?, enabled=?, account_non_expired=?, account_non_locked=?, credentials_non_expired=? " +
@@ -135,6 +136,7 @@ public class AuthUserDaoJdbc implements AuthUserDao {
         }
     }
 
+    @Nonnull
     private AuthUserEntity extractAuthUserEntityFromResultSet(ResultSet rs) throws SQLException {
         AuthUserEntity authUserEntity = new AuthUserEntity();
         authUserEntity.setUsername(rs.getString("username"));

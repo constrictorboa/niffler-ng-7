@@ -110,6 +110,7 @@ public class CategoryDaoSpringJdbc implements CategoryDao {
     }
 
     @Override
+    @Nonnull
     public List<CategoryEntity> findAllByUsername(String username) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.spendJdbcUrl()));
         return jdbcTemplate.query(String.format("SELECT * FROM category WHERE username = %s", username),

@@ -11,8 +11,10 @@ import java.util.UUID;
 public interface AuthAuthorityDao {
     void create(AuthorityEntity... authority);
 
+    @Nonnull
     AuthorityEntity create(AuthorityEntity authority);
 
+    @Nonnull
     AuthorityEntity update(AuthorityEntity authority);
 
     @Nonnull

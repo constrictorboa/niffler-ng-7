@@ -177,6 +177,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDao {
         }
     }
 
+    @Nonnull
     private UserdataUserEntity extractUserEntityFromResultSet(ResultSet resultSet) throws SQLException {
         UserdataUserEntity userEntity = new UserdataUserEntity();
         userEntity.setId(resultSet.getObject("id", UUID.class));

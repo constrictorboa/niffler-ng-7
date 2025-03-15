@@ -3,6 +3,7 @@ package guru.qa.niffler.data.dao;
 import guru.qa.niffler.data.entity.spend.CategoryEntity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +22,10 @@ public interface CategoryDao {
     @Nonnull
     Optional<CategoryEntity> findCategoryById(UUID id);
 
+    @Nullable
     Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName);
 
+    @Nonnull
     List<CategoryEntity> findAllByUsername(String username);
 
     @Nonnull

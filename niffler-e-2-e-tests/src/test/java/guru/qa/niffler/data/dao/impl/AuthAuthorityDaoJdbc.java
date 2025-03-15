@@ -31,6 +31,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    @Nonnull
     public AuthorityEntity create(AuthorityEntity authority) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "INSERT INTO authority (user_id, authority) " +
@@ -58,6 +59,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    @Nonnull
     public AuthorityEntity update(AuthorityEntity authority) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
                 "UPDATE authority SET user_id=?, authority=? WHERE id=?")) {
@@ -105,6 +107,7 @@ public class AuthAuthorityDaoJdbc implements AuthAuthorityDao {
         }
     }
 
+    @Nonnull
     private AuthorityEntity extractAuthorityEntityFromResultSet(ResultSet rs) throws SQLException {
         AuthorityEntity authorityEntity = new AuthorityEntity();
         authorityEntity.setId(rs.getObject("id", UUID.class));

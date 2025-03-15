@@ -44,6 +44,7 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    @Nonnull
     public AuthorityEntity create(AuthorityEntity authority) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         KeyHolder kh = new GeneratedKeyHolder();
@@ -63,6 +64,7 @@ public class AuthAuthorityDaoSpringJdbc implements AuthAuthorityDao {
     }
 
     @Override
+    @Nonnull
     public AuthorityEntity update(AuthorityEntity authority) {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSources.dataSource(CFG.authJdbcUrl()));
         jdbcTemplate.update(con -> {

@@ -124,6 +124,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     }
 
     @Override
+    @Nonnull
     public List<CategoryEntity> findAllByUsername(String username) {
         try (PreparedStatement ps = holder(CFG.spendJdbcUrl()).connection().prepareStatement(
                 "SELECT * FROM category WHERE username = ?"
@@ -176,6 +177,7 @@ public class CategoryDaoJdbc implements CategoryDao {
         }
     }
 
+    @Nonnull
     private CategoryEntity extractCategoryEntityFromResultSet(ResultSet rs) throws SQLException {
         CategoryEntity ce = new CategoryEntity();
         ce.setId(rs.getObject("id", UUID.class));

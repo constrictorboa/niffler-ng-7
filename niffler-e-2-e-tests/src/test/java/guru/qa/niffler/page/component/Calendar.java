@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Selenide.$$x;
 import static com.codeborne.selenide.Selenide.$x;
 
 @ParametersAreNonnullByDefault
-public class Calendar {
+public class Calendar extends BaseComponent<Calendar>{
     private final SelenideElement input = $("input[name='date']");
     private final SelenideElement viewCalendar = $x("//button[contains(@aria-label, 'Choose date')]");
     private final SelenideElement viewYear = $x("//button[contains(@aria-label, 'year')]");
@@ -26,6 +26,9 @@ public class Calendar {
     private final ElementsCollection days = $$("button[role='gridcell']");
     private final ElementsCollection years = $$x("//button[contains(@class, 'year')]");
 
+    public Calendar() {
+        super($(".MuiPickersLayout-root"));
+    }
 
     @Nonnull
     @Step("Выбрать в календаре дату {date}")

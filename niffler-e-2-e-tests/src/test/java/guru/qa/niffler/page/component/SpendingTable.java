@@ -17,7 +17,7 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 
-public class SpendingTable {
+public class SpendingTable  extends BaseComponent<SpendingTable>{
     private final ElementsCollection tableRows = $("#spendings tbody").$$("tr");
     private final SelenideElement historyOfSpendingsBlock = $("#spendings");
     private final SelenideElement deleteButton = $("button #delete");
@@ -25,6 +25,10 @@ public class SpendingTable {
     private final SelenideElement timeFilter = $("div #period");
     private final ElementsCollection dropdownList = $$("ul[role='listbox'] li");
     private final SearchField searchField = new SearchField();
+
+    public SpendingTable() {
+        super($("#spendings"));
+    }
 
     @Nonnull
     @Step("Отредактировать spending [{spendingDescription}]")

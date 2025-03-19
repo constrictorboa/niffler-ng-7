@@ -10,7 +10,7 @@ public class FriendsWebTest extends BaseWebTest {
 
     @User(friends = 1)
     @Test
-    void friendShouldBePresentInFriendsTable( UserJson user) {
+    void friendShouldBePresentInFriendsTable(UserJson user) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
@@ -58,6 +58,7 @@ public class FriendsWebTest extends BaseWebTest {
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .clickAcceptButton(user.testData().incomeInvitationsUsernames()[0])
+                .checkAlertMessage("Invitation of " + user.testData().incomeInvitationsUsernames()[0] + " accepted")
                 .checkThatFriendsTableContainsFriend(user.testData().incomeInvitationsUsernames()[0])
                 .checkThatUnfriendButtonVisible(user.testData().incomeInvitationsUsernames()[0]);
     }
@@ -69,6 +70,7 @@ public class FriendsWebTest extends BaseWebTest {
                 .login(user.username(), user.testData().password())
                 .goToFriendsPage()
                 .clickDeclineButton(user.testData().incomeInvitationsUsernames()[0])
+                .checkAlertMessage("Invitation of " + user.testData().incomeInvitationsUsernames()[0] + " is declined")
                 .checkThatTableEmpty();
     }
 }

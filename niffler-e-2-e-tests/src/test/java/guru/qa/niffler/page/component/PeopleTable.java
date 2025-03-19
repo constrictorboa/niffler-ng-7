@@ -9,14 +9,21 @@ import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
+import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$x;
 
-public class PeopleTable {
+public class PeopleTable extends BaseComponent<PeopleTable> {
     private final ElementsCollection peopleTable;
     private final SearchField searchField = new SearchField();
     private final SelenideElement declineButton = $$x("//button[text()='Decline']").get(1);
 
     public PeopleTable(SelenideElement self){
+        super(self);
+        this.peopleTable = self.$$("tr");
+    }
+
+    public PeopleTable(){
+        super($("#all"));
         this.peopleTable = self.$$("tr");
     }
 

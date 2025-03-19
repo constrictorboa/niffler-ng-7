@@ -10,8 +10,14 @@ import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 import guru.qa.niffler.service.SpendClient;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.Objects;
 import java.util.Optional;
 
+
+@ParametersAreNonnullByDefault
 public class SpendDbClient implements SpendClient {
 
     private static final Config CFG = Config.getInstance();
@@ -26,20 +32,22 @@ public class SpendDbClient implements SpendClient {
     );
 
 
+    @Nonnull
     @Override
     public SpendJson createSpend(SpendJson spend) {
-        return xaTransactionTemplate.execute(() -> SpendJson.fromEntity(
+        return Objects.requireNonNull(xaTransactionTemplate.execute(() -> SpendJson.fromEntity(
                         spendRepositoryHibernate.create(SpendEntity.fromJson(spend))
                 )
-        );
+        ));
     }
 
+    @Nonnull
     @Override
     public CategoryJson createCategory(CategoryJson category) {
-        return xaTransactionTemplate.execute(() -> CategoryJson.fromEntity(
+        return Objects.requireNonNull(xaTransactionTemplate.execute(() -> CategoryJson.fromEntity(
                         spendRepositoryHibernate.createCategory(CategoryEntity.fromJson(category))
                 )
-        );
+        ));
     }
 
 
@@ -55,6 +63,7 @@ public class SpendDbClient implements SpendClient {
     }
 
     @Override
+    @Nullable
     public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         return xaTransactionTemplate.execute(() -> {
                     return spendRepositoryHibernate.findCategoryByUsernameAndCategoryName(username, categoryName)

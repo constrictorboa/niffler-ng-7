@@ -13,6 +13,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
 import java.net.CookieManager;
 import java.net.CookiePolicy;
@@ -21,6 +23,7 @@ import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ParametersAreNonnullByDefault
 public class UsersApiClient implements UsersClient {
     OkHttpClient okHttpClient = new OkHttpClient.Builder()
             .cookieJar(new JavaNetCookieJar(
@@ -47,6 +50,7 @@ public class UsersApiClient implements UsersClient {
     private static final String defaultPassword = "12345";
 
 
+    @Nonnull
     @Override
     public UserJson createUser(String username, String password) {
         try {

@@ -10,19 +10,23 @@ import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.data.mapper.SpendEntityRowMapper;
 import guru.qa.niffler.data.repository.SpendRepository;
 
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 
-import static guru.qa.niffler.data.tpl.Connections.holder;
+import static guru.qa.niffler.data.jdbc.Connections.holder;
 
+@ParametersAreNonnullByDefault
 public class SpendRepositoryJdbc implements SpendRepository {
     private static final Config CFG = Config.getInstance();
     private final SpendDao spendDaoJdbc = new SpendDaoJdbc();
     private final CategoryDao categoryDao = new CategoryDaoJdbc();
 
+    @Nonnull
     @Override
     public SpendEntity create(SpendEntity spend) {
         CategoryEntity categoryEntity = categoryDao.create(spend.getCategory());
@@ -30,32 +34,40 @@ public class SpendRepositoryJdbc implements SpendRepository {
         return spendDaoJdbc.create(spend);
     }
 
+    @Nonnull
     @Override
     public SpendEntity update(SpendEntity spend) {
         categoryDao.update(spend.getCategory());
         return spendDaoJdbc.update(spend);
     }
 
+    @Nonnull
     @Override
     public CategoryEntity createCategory(CategoryEntity category) {
         return categoryDao.create(category);
     }
 
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         return categoryDao.findCategoryById(id);
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String name) {
         return categoryDao.findCategoryByUsernameAndCategoryName(username, name);
     }
 
+    @Nonnull
     @Override
     public Optional<SpendEntity> findById(UUID id) {
         return spendDaoJdbc.findSpendById(id);
     }
 
+    @SuppressWarnings("resource")
+    @Nonnull
     @Override
     public Optional<SpendEntity> findByUsernameAndSpendDescription(String username, String description) {
         try (PreparedStatement ps = holder(CFG.authJdbcUrl()).connection().prepareStatement(
@@ -84,12 +96,14 @@ public class SpendRepositoryJdbc implements SpendRepository {
         }
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void remove(SpendEntity spend) {
         spendDaoJdbc.deleteSpend(spend);
         categoryDao.deleteCategory(spend.getCategory());
     }
 
+    @SuppressWarnings("resource")
     @Override
     public void removeCategory(CategoryEntity category) {
         spendDaoJdbc.deleteSpendByCategoryId(category.getId());

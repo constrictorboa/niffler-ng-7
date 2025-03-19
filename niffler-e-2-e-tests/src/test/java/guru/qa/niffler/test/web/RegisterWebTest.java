@@ -50,6 +50,6 @@ public class RegisterWebTest extends BaseWebTest {
                 .setPasswordSubmit(password + "1")
                 .clickOnSubmitButton()
                 .checkThatRegisterFormVisible()
-                .checkThatErrorPaaswordsShouldBeEqualVisible();
+                .checkThatErrorPasswordsShouldBeEqualVisible();
     }
 }

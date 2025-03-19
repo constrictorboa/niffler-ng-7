@@ -10,13 +10,20 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+
+@ParametersAreNonnullByDefault
 public class SpendApiClient implements SpendClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
@@ -26,6 +33,7 @@ public class SpendApiClient implements SpendClient {
 
     private final SpendApi spendApi = retrofit.create(SpendApi.class);
 
+    @Nonnull
     public SpendJson createSpend(SpendJson spend) {
         final Response<SpendJson> response;
         try {
@@ -35,9 +43,11 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(201, response.code());
+        assertNotEquals(null, response.body());
         return response.body();
     }
 
+    @Nullable
     public SpendJson editSpend(SpendJson spend) {
         final Response<SpendJson> response;
         try {
@@ -50,6 +60,7 @@ public class SpendApiClient implements SpendClient {
         return response.body();
     }
 
+    @Nullable
     public SpendJson getSpend(String id, String username) {
         final Response<SpendJson> response;
         try {
@@ -62,10 +73,11 @@ public class SpendApiClient implements SpendClient {
         return response.body();
     }
 
+    @Nonnull
     public List<SpendJson> getSpends(String username,
-                                     CurrencyValues filterCurrency,
-                                     Date from,
-                                     Date to) {
+                                     @Nullable CurrencyValues filterCurrency,
+                                     @Nullable Date from,
+                                     @Nullable Date to) {
         final Response<List<SpendJson>> response;
         try {
             response = spendApi.getSpends(username, filterCurrency, from, to)
@@ -74,7 +86,9 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(200, response.code());
-        return response.body();
+        return response.body() != null
+                ? response.body()
+                : Collections.emptyList();
     }
 
     public void deleteSpend(String username,
@@ -87,6 +101,7 @@ public class SpendApiClient implements SpendClient {
         }
     }
 
+    @Nonnull
     public CategoryJson createCategory(CategoryJson category) {
         final Response<CategoryJson> response;
         try {
@@ -96,6 +111,7 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(200, response.code());
+        assertNotEquals(null, response.body());
         return response.body();
     }
 
@@ -105,6 +121,7 @@ public class SpendApiClient implements SpendClient {
     }
 
     @Override
+    @Nullable
     public Optional<CategoryJson> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         final Response<List<CategoryJson>> response;
         try {
@@ -121,6 +138,7 @@ public class SpendApiClient implements SpendClient {
                 .findFirst();
     }
 
+    @Nullable
     public CategoryJson updateCategory(CategoryJson category) {
         final Response<CategoryJson> response;
         try {
@@ -133,6 +151,7 @@ public class SpendApiClient implements SpendClient {
         return response.body();
     }
 
+    @Nonnull
     public List<CategoryJson> getCategories(String username,
                                             boolean excludeArchived) {
         final Response<List<CategoryJson>> response;
@@ -143,6 +162,8 @@ public class SpendApiClient implements SpendClient {
             throw new AssertionError(e);
         }
         assertEquals(200, response.code());
-        return response.body();
+        return response.body() != null
+                ? response.body()
+                : Collections.emptyList();
     }
 }

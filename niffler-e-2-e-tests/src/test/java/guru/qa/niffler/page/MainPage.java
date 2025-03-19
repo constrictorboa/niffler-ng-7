@@ -51,12 +51,12 @@ public class MainPage {
     }
 
     @Nonnull
-    public FriendsPage toFriendsPage() {
-        return header.toFriendsPage();
+    public FriendsPage goToFriendsPage() {
+        return header.goToFriendsPage();
     }
 
     @Nonnull
-    public ProfilePage toProfilePage() {
-        return header.toProfilePage();
+    public ProfilePage goToProfilePage() {
+        return header.goToProfilePage();
     }
 }

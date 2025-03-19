@@ -29,7 +29,7 @@ public class Header {
 
     @Nonnull
     @Step("Перейти на страницу Friends")
-    public FriendsPage toFriendsPage() {
+    public FriendsPage goToFriendsPage() {
         menuButton.click();
         friendsButton.click();
         return new FriendsPage();
@@ -37,7 +37,7 @@ public class Header {
 
     @Nonnull
     @Step("Перейти на страницу All people")
-    public PeoplePage toPeoplePage() {
+    public PeoplePage goToPeoplePage() {
         menuButton.click();
         allPeopleButton.click();
         return new PeoplePage();
@@ -45,7 +45,7 @@ public class Header {
 
     @Nonnull
     @Step("Перейти на страницу Profile")
-    public ProfilePage toProfilePage() {
+    public ProfilePage goToProfilePage() {
         menuButton.click();
         profileButton.click();
         return new ProfilePage();
@@ -69,7 +69,7 @@ public class Header {
 
     @Nonnull
     @Step("Перейти на главную страницу")
-    public MainPage toMainPage(){
+    public MainPage goToMainPage(){
         homeButton.click();
         return new MainPage();
     }

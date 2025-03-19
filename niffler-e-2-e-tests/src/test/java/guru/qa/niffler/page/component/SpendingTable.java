@@ -2,7 +2,8 @@ package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import guru.qa.niffler.model.DataFilterValues;
+import guru.qa.niffler.model.FilterData;
+import guru.qa.niffler.model.MonthEnum;
 import guru.qa.niffler.page.EditSpendingPage;
 import io.qameta.allure.Step;
 
@@ -39,7 +40,7 @@ public class SpendingTable {
 
     @Nonnull
     @Step("Выбрать период {period}")
-    public SpendingTable selectPeriod(DataFilterValues period) {
+    public SpendingTable selectPeriod(FilterData period) {
         timeFilter.click();
         dropdownList.stream()
                 .filter(elem -> Objects.equals(elem.getAttribute("data-value"), period.name()))
@@ -84,7 +85,7 @@ public class SpendingTable {
         }
         rowElems.get(4)
                 .shouldBe(text(
-                        getMonthName(date.getMonthValue()) + " "
+                        MonthEnum.getMonthShortName(date.getMonthValue()) + " "
                                 + day + ", "
                                 + date.getYear()));
 
@@ -93,11 +94,6 @@ public class SpendingTable {
     @Step("Проверить размер таблицы History of Spendings")
     public void checkTableSize(int expectedSize) {
         tableRows.should(size(expectedSize));
-    }
-
-    private String getMonthName(int num) {
-        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        return monthNames[num - 1];
     }
 
 }

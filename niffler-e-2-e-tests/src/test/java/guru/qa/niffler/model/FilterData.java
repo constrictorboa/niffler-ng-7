@@ -1,5 +1,5 @@
 package guru.qa.niffler.model;
 
-public enum DataFilterValues {
+public enum FilterData {
     ALL, TODAY, WEEK, MONTH;
 }

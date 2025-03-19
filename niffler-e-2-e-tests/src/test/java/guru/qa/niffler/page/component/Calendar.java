@@ -2,6 +2,7 @@ package guru.qa.niffler.page.component;
 
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import guru.qa.niffler.model.MonthEnum;
 import io.qameta.allure.Step;
 import org.openqa.selenium.NoSuchElementException;
 
@@ -36,21 +37,16 @@ public class Calendar {
                 .scrollIntoView(false)
                 .click();
         int monthNumber = 12;
-        while (!calendarHeader.getText().contains(getMonthName(localDate.getMonthValue()))) {
+        while (!calendarHeader.getText().contains(MonthEnum.getMonthName(localDate.getMonthValue()))) {
             previousMonth.click();
             monthNumber--;
             if (monthNumber <= 0) {
-                throw new NoSuchElementException("В календаре не найден месяц " + getMonthName(localDate.getMonthValue()));
+                throw new NoSuchElementException("В календаре не найден месяц " + MonthEnum.getMonthName(localDate.getMonthValue()));
             }
         }
         days
                 .find(text(String.valueOf(localDate.getDayOfMonth())))
                 .click();
         return this;
-    }
-
-    private String getMonthName(int num) {
-        String[] monthNames = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
-        return monthNames[num - 1];
     }
 }

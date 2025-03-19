@@ -19,7 +19,7 @@ public class ProfileWebTest extends BaseWebTest {
     void archivedCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login("duck", "12345")
-                .toProfilePage()
+                .goToProfilePage()
                 .checkThatCategoryPresentInList(categoryJson.name())
                 .archiveCategory(categoryJson.name())
                 .checkThatCategoryNotPresentInList(categoryJson.name())
@@ -37,7 +37,7 @@ public class ProfileWebTest extends BaseWebTest {
     void activeCategoryShouldPresentInCategoriesList(CategoryJson categoryJson) {
         Selenide.open(CFG.frontUrl(), LoginPage.class)
                 .login("duck", "12345")
-                .toProfilePage()
+                .goToProfilePage()
                 .checkThatCategoryNotPresentInList(categoryJson.name())
                 .clickOnShowArchivedRadiobutton()
                 .checkThatCategoryPresentInList(categoryJson.name())
@@ -51,8 +51,8 @@ public class ProfileWebTest extends BaseWebTest {
     void newUserCanAddNewCategory(UserJson user) {
         String newCategory = "new";
         Selenide.open(CFG.frontUrl(), LoginPage.class)
-                .login("duck", "12345")
-                .toProfilePage()
+                .login(user.username(), user.testData().password())
+                .goToProfilePage()
                 .addNewCategory(newCategory)
                 .checkThatCategoryPresentInList(newCategory);
     }

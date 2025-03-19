@@ -20,7 +20,9 @@ public interface Config {
   String spendJdbcUrl();
 
   @Nonnull
-  String ghUrl();
+  default String ghUrl() {
+    return "https://api.github.com/";
+  }
 
   @Nonnull
   String gatewayUrl();

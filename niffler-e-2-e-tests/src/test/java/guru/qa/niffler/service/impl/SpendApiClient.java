@@ -1,6 +1,7 @@
 package guru.qa.niffler.service.impl;
 
 import guru.qa.niffler.api.SpendApi;
+import guru.qa.niffler.api.core.RestClient;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.CurrencyValues;
@@ -24,14 +25,20 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 @ParametersAreNonnullByDefault
-public class SpendApiClient implements SpendClient {
+public class SpendApiClient extends RestClient, implements SpendClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Config.getInstance().spendUrl())
             .addConverterFactory(JacksonConverterFactory.create())
             .build();
 
-    private final SpendApi spendApi = retrofit.create(SpendApi.class);
+    private final SpendApi spendApi;
+
+    public SpendApiClient(String baseUrl) {
+        super(CFG.spendUrl());
+        this.spendApi = create(SpendApi.class);
+    }
+
 
     @Nonnull
     public SpendJson createSpend(SpendJson spend) {

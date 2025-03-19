@@ -11,7 +11,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class FriendsPage {
+public class FriendsPage extends BasePage<FriendsPage>{
     private final PeopleTable friendsTable = new PeopleTable($("#friends"));
     private final PeopleTable requestsTable = new PeopleTable($("#requests"));
     private final SelenideElement allPeopleButton = $("a[href='/people/all']");

@@ -10,7 +10,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class PeoplePage {
+public class PeoplePage extends BasePage<PeoplePage> {
 
     private final SelenideElement peopleTab = $("a[href='/people/friends']");
     private final SelenideElement allTab = $("a[href='/people/all']");

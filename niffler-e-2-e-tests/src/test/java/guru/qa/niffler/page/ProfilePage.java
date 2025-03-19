@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 @ParametersAreNonnullByDefault
-public class ProfilePage {
+public class ProfilePage extends BasePage<ProfilePage> {
     public static String url = Config.getInstance().frontUrl() + "profile";
     public static SelenideElement addNewCategoryInput = $("#category");
 

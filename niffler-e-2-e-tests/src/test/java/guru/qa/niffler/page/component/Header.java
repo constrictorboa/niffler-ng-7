@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$x;
 
 @ParametersAreNonnullByDefault
-public class Header {
+public class Header extends BaseComponent<Header>{
     private final SelenideElement menuButton = $("button[aria-label='Menu']");
     private final SelenideElement profileButton = $("a[href='/profile']");
     private final SelenideElement friendsButton = $("a[href='/people/friends']");
@@ -25,6 +25,10 @@ public class Header {
     private final SelenideElement homeButton = $("a[href='/main']");
     private final SelenideElement signOutButton  = $x("//li[text()='Sign out']");
     private final SelenideElement logOutButton = $x("//button[text()='Log out']");
+
+    public Header() {
+        super($("#root header"));
+    }
 
 
     @Nonnull

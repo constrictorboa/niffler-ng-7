@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import static com.codeborne.selenide.Selenide.$;
 
 @ParametersAreNonnullByDefault
-public class EditSpendingPage  extends BasePage<EditSpendingPage> {
+public class EditSpendingPage extends BasePage<EditSpendingPage> {
     private final SelenideElement descriptionInput = $("#description");
     private final SelenideElement amountInput = $("#amount");
     private final SelenideElement categoryInput = $("#category");

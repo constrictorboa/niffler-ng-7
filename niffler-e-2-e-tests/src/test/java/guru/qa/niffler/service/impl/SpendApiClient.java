@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 
 @ParametersAreNonnullByDefault
-public class SpendApiClient extends RestClient, implements SpendClient {
+public class SpendApiClient extends RestClient implements SpendClient {
 
     private final Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(Config.getInstance().spendUrl())
